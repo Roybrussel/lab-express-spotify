@@ -42,6 +42,21 @@ app.get("/artist-search", (req, res) => {
     );
 });
 
+app.get("/albums/:id", (req, res) => {
+  console.log(req.params);
+  const { id } = req.params;
+  spotifyApi
+    .getArtistAlbums(id)
+    .then((data) => {
+      const album = data.body.items;
+      res.render("albums", { album });
+      console.log(data.body.items);
+    })
+    .catch((err) =>
+      console.log("The error while searcing albums occured: ", err)
+    );
+});
+
 app.listen(3000, () =>
   console.log("My Spotify project running on port 3000 🎧 🥁 🎸 🔊")
 );
