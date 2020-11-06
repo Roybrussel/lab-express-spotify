@@ -32,7 +32,7 @@ app.get("/", (req, res) => {
 app.get("/artist-search", (req, res) => {
   const { artist } = req.query;
   spotifyApi
-    .searchArtists(artist)
+    .searchArtists(artist, { limit: 50 })
     .then((data) => {
       const artist = data.body.artists.items;
       res.render("artist-search-results", { artist });
@@ -43,17 +43,28 @@ app.get("/artist-search", (req, res) => {
 });
 
 app.get("/albums/:id", (req, res) => {
-  console.log(req.params);
   const { id } = req.params;
   spotifyApi
     .getArtistAlbums(id)
     .then((data) => {
       const album = data.body.items;
       res.render("albums", { album });
-      console.log(data.body.items);
     })
     .catch((err) =>
       console.log("The error while searcing albums occured: ", err)
+    );
+});
+
+app.get("/tracks/:id", (req, res) => {
+  const { id } = req.params;
+  spotifyApi
+    .getAlbumTracks(id)
+    .then((data) => {
+      const track = data.body.items;
+      res.render("tracks", { track });
+    })
+    .catch((err) =>
+      console.log("The error while checking the album tracks occured: ", err)
     );
 });
 
